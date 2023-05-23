@@ -1,5 +1,18 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout
+from PyQt5.QtCore import QThread, pyqtSignal
+
+
+class ProcessingThread(QThread):
+    task_completed = pyqtSignal(str)
+
+    def run(self):
+        # Simulating a time-consuming task
+        import time
+        time.sleep(5)
+
+        # Emitting a signal to indicate task completion
+        self.task_completed.emit("Processing completed!")
 
 
 class MyWindow(QWidget):
@@ -18,27 +31,18 @@ class MyWindow(QWidget):
 
         # Create the left panel with buttons
         left_panel = QVBoxLayout()
-        button1 = QPushButton("Start Charging", self)
-        button1.clicked.connect(lambda: self.button_click(1))
-        button1.setFixedHeight(200)
-        button2 = QPushButton("Button 2", self)
-        button2.clicked.connect(lambda: self.button_click(2))
-        button2.setFixedHeight(200)
-        button3 = QPushButton("Button 3", self)
-        button3.setFixedHeight(200)
-        button3.clicked.connect(lambda: self.button_click(3))
-        left_panel.addWidget(button1)
-        left_panel.addWidget(button2)
-        left_panel.addWidget(button3)
+        self.button1 = QPushButton("Start Charging", self)
+        self.button1.clicked.connect(self.start_processing)
+        self.button1.setFixedHeight(200)
+
+        left_panel.addWidget(self.button1)
 
         # Create the right panel with labels
         right_panel = QVBoxLayout()
-        self.label1 = QLabel("Label 1", self)
-        self.label2 = QLabel("Label 2", self)
-        self.label3 = QLabel("Label 3", self)
-        right_panel.addWidget(self.label1)
-        right_panel.addWidget(self.label2)
-        right_panel.addWidget(self.label3)
+        self.userLabel = QLabel("Label 1", self)
+        self.BalanceLabel = QLabel("Label 2", self)
+        right_panel.addWidget(self.userLabel)
+        right_panel.addWidget(self.BalanceLabel)
 
         # Add the left and right panels to the main layout
         layout.addLayout(left_panel)
@@ -47,14 +51,22 @@ class MyWindow(QWidget):
         # Set the main layout for the window
         self.setLayout(layout)
 
-    def button_click(self, button_num):
-        label_text = f"Button {button_num} clicked!"
-        if button_num == 1:
-            self.label1.setText(label_text)
-        elif button_num == 2:
-            self.label2.setText(label_text)
-        elif button_num == 3:
-            self.label3.setText(label_text)
+    def start_processing(self):
+        # Create and start the processing thread
+        self.processing_thread = ProcessingThread()
+        self.processing_thread.task_completed.connect(self.on_processing_completed)
+        self.processing_thread.start()
+
+        # Disable the button while processing
+
+        self.button1.setEnabled(False)
+
+    def on_processing_completed(self, message):
+        # Update the label with the task completion message
+        self.BalanceLabel.setText(message)
+
+        # Re-enable the button
+        self.button1.setEnabled(True)
 
 
 if __name__ == '__main__':

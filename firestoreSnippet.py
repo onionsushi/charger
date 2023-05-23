@@ -4,7 +4,7 @@ from firebase_admin import firestore
 import uuid
 from datetime import datetime
 # Use a service account.
-cred = credentials.Certificate("sampledb-385301-firebase-adminsdk-mk65f-309efd2f1b.json")
+cred = credentials.Certificate("cred.json")
 
 
 app = firebase_admin.initialize_app(cred, )
