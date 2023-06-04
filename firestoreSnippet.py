@@ -20,6 +20,8 @@ db = firestore.client()
 
 
 
+
+
 def AddData(CollectionName : str, data : dict, DocumentName: str = ""):
     if not DocumentName:
         DocumentName = uuid.uuid4()
@@ -32,9 +34,8 @@ def FindData(CollectionName : str, arg1, relation, arg2):
 #   
     result = []
     docs = db.collection(CollectionName).where(arg1, relation, arg2).stream()
-    print(docs)
     for doc in docs:
-        print(doc.to_dict())
+        print("FindData: " + str(doc.to_dict()))
         result.append(doc.to_dict())
     return result
 
@@ -71,6 +72,7 @@ def FindUser(UserId: str):
 def ModifyUserData(userId: str, data: dict):
     ref = db.collection("UserData").document(userId)
     ref.update(data)
+    print("ModifyUserData: " + str(FindUser(userId)))
 
 def FindDevice(deviceId: str):
     return FindData("DeviceData", "deviceId", "==", deviceId)
@@ -92,7 +94,7 @@ def StartCharge(deviceId, userId):
     
 def finishCharge(deviceId):
     ref = db.collection("DeviceData").document(deviceId)
-    ref.update({"recentUse": datetime.now(), "Status": "Off", "Balance": 0})
+    ref.update({"recentUse": datetime.now(), "Status": "Off", "Balance": 0, "CurrentUser": None})
 
 def setConfigure(deviceId, ipaddress):
     if FindDevice(deviceId) == []:
@@ -118,8 +120,12 @@ def BalanceChange(UserId: str, amount : int):
     if res != []:
 
         currentBalance = res[0]["Balance"]
-        ModifyUserData(UserId, {"Balance" : currentBalance - amount})
-
+        if (currentBalance - amount > 0):
+            ModifyUserData(UserId, {"Balance" : currentBalance - amount})
+            return True
+        else:
+            return False
+        
 if __name__ == "__main__":
     #Add device
     AddDevice("deviceId", "sampleipaddress")
