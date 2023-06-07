@@ -148,15 +148,6 @@ class MyWindow(QWidget):
 if __name__ == '__main__':
     ''' Make MyWindow full screen with pyqt5'''
     app = QApplication(sys.argv)
-    screen_resolution = app.desktop().screenGeometry()
-    width, height = screen_resolution.width(), screen_resolution.height()
-    window = MyWindow()
-    '''set window size'''
-    window.resize(width, height)
-    window.show()
-    sys.exit(app.exec_())
-
-    # app = QApplication(sys.argv)
-    # window = MyWindow()
-    # window.show()
-    # sys.exit(app.exec_())
+    mywindow = MyWindow()
+    mywindow.showFullScreen()
+    app.exec_()
