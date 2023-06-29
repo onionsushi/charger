@@ -3,6 +3,7 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import uuid
 from datetime import datetime
+import socket
 # Use a service account.
 cred = credentials.Certificate("cred.json")
 
@@ -132,10 +133,13 @@ if __name__ == "__main__":
     #add user
     userId = AddUser("TestUser")
     #change device ipaddress
-    setConfigure("deviceId", "newipaddress")
-    #Add balance to test user
-    ModifyUserData(userId, {"Balance": 2000})
-    #start charging
-    StartCharge("deviceId", userId)
-    BalanceChange(userId, 1000)
-    finishCharge("deviceId")
+    hostname = socket.gethostname()
+    ipaddress = socket.gethostbyname(hostname)#ipv4
+    ipaddress = socket.getaddrinfo(hostname, None, socket.AF_INET6)[0][4][0] #ipv6
+    setConfigure("deviceId", ipaddress)
+    # #Add balance to test user
+    # ModifyUserData(userId, {"Balance": 2000})
+    # #start charging
+    # StartCharge("deviceId", userId)
+    # BalanceChange(userId, 1000)
+    # finishCharge("deviceId")
