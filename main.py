@@ -29,11 +29,6 @@ def doorclosed():
     return {"message": "Door is closed"}
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: str = None):
-    return {"item_id": item_id, "q": q}
-
-
 #uvicorn main:app --host 2607:fea8:1f1c:6600::12 --port 8000 --reload
 #uvicorn main:app --port 8000 --reload
 #uvicorn main:app --host 0.0.0.0 --port 8000
