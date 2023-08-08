@@ -3,19 +3,8 @@ import RPi.GPIO as GPIO
 import time
 from signal433 import sendLockSignal
 
-servo_pin = 17
-
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(servo_pin, GPIO.OUT)
-pwm = GPIO.PWM(servo_pin, 50)  # Using PWM frequency of 50Hz
 
 # Function to control the servo motor
-def control_servo(angle):
-    duty_cycle = (angle / 18) + 2.5  # Convert angle to duty cycle
-    pwm.ChangeDutyCycle(duty_cycle)
-
-    
-
 
 app = FastAPI()
 
