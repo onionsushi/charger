@@ -4,6 +4,8 @@ from firebase_admin import firestore
 import uuid
 from datetime import datetime
 import socket
+import requests
+import json
 # Use a service account.
 cred = credentials.Certificate("cred.json")
 
@@ -131,7 +133,10 @@ if __name__ == "__main__":
     #Add device
     AddDevice("deviceId", "sampleipaddress")
     #add user
-    userId = AddUser("TestUser")
+    # userId = AddUser("TestUser")
+    url = 'https://extreme-ip-lookup.com/json/'
+    r = requests.get(url)
+    data = json.loads(r.content.decode())
     #change device ipaddress
     hostname = socket.gethostname()
     ipaddress = socket.gethostbyname(hostname)#ipv4
