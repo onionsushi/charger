@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 import RPi.GPIO as GPIO
 import time
+from signal433 import sendLockSignal
 
 servo_pin = 17
 
@@ -22,19 +23,9 @@ app = FastAPI()
 def read_root():
     return {"Hello": "World"}
 
-
-@app.get("/dooropen/")
-def dooropen():
-    pwm = GPIO.PWM(servo_pin, 50)
-    control_servo(90)
-    pwm.stop()
-    return {"message": "Door is open"}
-
 @app.get("/doorclosed/")
 def doorclosed():
-    pwm = GPIO.PWM(servo_pin, 50)
-    control_servo(0)
-    pwm.stop()
+    sendLockSignal()
     return {"message": "Door is closed"}
 
 
