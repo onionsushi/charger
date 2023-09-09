@@ -38,4 +38,5 @@ async def discover_and_write(service_uuid, characteristic_uuid, value):
     print(f"No devices found that provide the service.")
 
 # Run the discover_and_write function
-asyncio.run(discover_and_write(service_uuid, characteristic_uuid, b'\x04'))
+if __name__ == "__main__":
+    asyncio.run(discover_and_write(service_uuid, characteristic_uuid, b'\x04'))
