@@ -28,7 +28,8 @@ async def discover_and_write(service_uuid, characteristic_uuid, value):
 
                     msg = await client.read_gatt_char(characteristic_uuid)
                     print(msg)
-                    await client.disconnect()
+                    print("disconnecting...")
+                    print("disconnected")
                     # await client.disconnect()
                     # Disconnect from the device
                     return
