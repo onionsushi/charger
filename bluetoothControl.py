@@ -1,6 +1,6 @@
 import asyncio
 from bleak import BleakScanner, BleakClient
-
+import time
 # Replace with your service UUID and characteristic UUID
 service_uuid = "a5d3a518-3d69-11ee-be56-0242ac120002"
 characteristic_uuid = "d49293cc-85ee-4404-b141-100f3563085e"
@@ -28,6 +28,7 @@ async def discover_and_write(service_uuid, characteristic_uuid, value):
 
                     msg = await client.read_gatt_char(characteristic_uuid)
                     print(msg)
+                    time.sleep(5)
                     print("disconnecting...")
                     print("disconnected")
                     # await client.disconnect()
