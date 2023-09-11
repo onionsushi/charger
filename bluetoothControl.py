@@ -16,26 +16,28 @@ async def discover_and_write(service_uuid, characteristic_uuid, value):
         # Connect to the device 
         if len(device.metadata.get("uuids", ["0"])) != 0 and device.metadata.get("uuids", ["0"])[0] == service_uuid:
             try:
-                async with BleakClient(device.address) as client:
-                    # await client.connect()
-                    #chat gpt says connect() must be done.
-                    print(f"Found device with address {device.address} that provides the service {service_uuid}.")
-                    # Write a value to the characteristic
-                    msg = await client.read_gatt_char(characteristic_uuid)
-                    print(msg)
-                    res = await client.write_gatt_char(characteristic_uuid, value, response = True)
-                    print(f"Written value '{value}' to characteristic {characteristic_uuid}.")
+                client = BleakClient(device.address)
+                await client.connect()
+                # await client.connect()
+                #chat gpt says connect() must be done.
+                print(f"Found device with address {device.address} that provides the service {service_uuid}.")
+                # Write a value to the characteristic
+                msg = await client.read_gatt_char(characteristic_uuid)
+                print(msg)
+                res = await client.write_gatt_char(characteristic_uuid, value, response = True)
+                print(f"Written value '{value}' to characteristic {characteristic_uuid}.")
 
-                    msg = await client.read_gatt_char(characteristic_uuid)
-                    print(msg)
-                    time.sleep(5)
-                    print("disconnecting...")
-                    print("disconnected")
-                    # await client.disconnect()
-                    # Disconnect from the device
-                    return
+                msg = await client.read_gatt_char(characteristic_uuid)
+                print(msg)
+                time.sleep(5)
+                print("disconnecting...")
+                print("disconnected")
+                await client.disconnect()
+                # Disconnect from the device
+                return
             except Exception as e:
                 print("failed to get device info: " + str(e))
+                return 
 
     print(f"No devices found that provide the service.")
 
