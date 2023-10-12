@@ -1,4 +1,4 @@
-from bluepy.btle import Peripheral, UUID, AssignedNumbers
+from bluepy.btle import Peripheral, UUID, AssignedNumbers, ADDR_TYPE_RANDOM
 
 
 def discover_and_write():
@@ -13,7 +13,7 @@ def discover_and_write():
     value = b'\x04'
 
     # Connect to the device
-    peripheral = Peripheral(DEVICE_UUID)
+    peripheral = Peripheral(DEVICE_UUID, ADDR_TYPE_RANDOM)
 
     # Find the service and characteristic you want to write to
     service = peripheral.getServiceByUUID(SERVICE_UUID)
@@ -24,6 +24,6 @@ def discover_and_write():
 
     # Disconnect from the device
     peripheral.disconnect()
-    
+
 if __name__ == "__main__":
     discover_and_write()
