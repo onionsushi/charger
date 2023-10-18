@@ -1,6 +1,6 @@
 from fastapi import FastAPI, BackgroundTasks
 import time
-
+import subprocess
 import bluetoothControl 
 import uvicorn
 
@@ -15,7 +15,8 @@ def read_root():
 
 @app.get("/locktoggle/")
 async def locktoggle(background_tasks : BackgroundTasks):
-    background_tasks.add_task(bluetoothControl.discover_and_write, bluetoothControl.service_uuid, bluetoothControl.characteristic_uuid, b'\x04')
+    subprocess.call('sudo sh gatt.sh', shell=True)
+    # background_tasks.add_task(bluetoothControl.discover_and_write, bluetoothControl.service_uuid, bluetoothControl.characteristic_uuid, b'\x04')
     return {"message": "Lock toggled"}
 
 
